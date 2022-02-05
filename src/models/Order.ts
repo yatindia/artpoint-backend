@@ -4,10 +4,18 @@ import mongo from "mongoose"
 const OrderDetails = new mongo.Schema({
     width : Number,
     height : Number,
-    arcTop : Boolean,
-    arcBottom : Boolean,
+    arc : Boolean,
+    position: {
+        top: Boolean,
+        botton: Boolean,
+        right: Boolean,
+        left: Boolean
+
+    },
     varnish : Boolean,
     whiteCoat : Boolean,
+    quantity: Boolean,
+    price: Number,
     sandwich : Number,
     message : String
 })

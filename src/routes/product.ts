@@ -54,7 +54,7 @@ products.post("/category/:operation", async(req, res )=>{
 
     let data = {
         category : req.body.category,
-        subCategory : req.body.subCategory
+        subCategory : req.body.subcategory
     }
 
     let checkExist = await Category.findOne({category : req.body.category}) || false
@@ -63,6 +63,8 @@ products.post("/category/:operation", async(req, res )=>{
         status : false,
         message : "Somthing went wrong"
     }
+
+
 
     let _id = req.body._id || ""
     
@@ -93,11 +95,18 @@ products.post("/category/:operation", async(req, res )=>{
                 response.data = list;
                 break;
     
+            case "listone":
+                  
+                let listone = await Category.findById(_id).catch((err: any)=> { response.backError = err; throw "error"})
+
+                response.data = listone;
+                break;
+    
             case "delete":
-        
-                // await Category.findOneAndDelete({_id:_id}).catch((err: any)=> { response.backError = err; throw "error"})
-                response.backError = "Products have been not yet added"
-                throw "error"
+                       
+                await Category.findByIdAndDelete({_id:_id}).catch((err: any)=> { response.backError = err; throw "error"})
+
+             
                 break;
     
         
@@ -107,12 +116,13 @@ products.post("/category/:operation", async(req, res )=>{
         }
          
     } catch (error) {
-        
+ 
         return res.json(response)
     }
       
     response.status = true
     response.message = "Operation successful"
+    
     
     res.json(response)
     
@@ -258,8 +268,8 @@ products.post("/update", async (req : Request, res: Response)=>{
 // List products
 products.post("/search", async (req, res)=>{
 
-    let skip = req.body.skip
-    let limit = req.body.limit
+    // let skip = req.body.skip
+    // let limit = req.body.limit
     let category = req.body.category
     let subCategory = req.body.subCategory
 
@@ -269,8 +279,8 @@ products.post("/search", async (req, res)=>{
     }
 
     let list_query = {
-        category : {$regex: ".*" + category + ".*"},
-        subCategory :  {$regex: ".*" + subCategory + ".*"}
+        category : category ,
+        subCategory : subCategory 
     }
     
     //send list query

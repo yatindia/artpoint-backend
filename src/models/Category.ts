@@ -8,8 +8,8 @@ const CategorySchema = new mongo.Schema({
     },
 
     subCategory : [{
-        type : String,
-        required: true
+        image: String,
+        text: String
     }]
 })
 
