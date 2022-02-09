@@ -20,9 +20,10 @@ import distributer from "./routes/distributer"
 import order from "./routes/orders"
 import marketeer  from "./routes/marketeer"
 
+//MODELS
+import Trend from "./models/Trend"
 
 //ROUTES
-
 app.use("/admin", admin)
 app.use("/distributer", distributer)
 app.use("/marketeer", marketeer)
@@ -40,6 +41,14 @@ mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@artpo
 
 app.get("/", (req, res)=> {
     res.send("WELCOME TO THE PROJECT API")
+})
+
+
+app.post("/trends", async (req, res)=> {
+
+    let trends = await Trend.find()
+    
+    res.json({ data : trends[0].images})
 })
 
 

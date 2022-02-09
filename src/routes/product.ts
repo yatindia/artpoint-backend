@@ -92,6 +92,9 @@ products.post("/category/:operation", async(req, res )=>{
             case "list":
                 let list = await Category.find().catch((err: any)=> { response.backError = err; throw "error"})
 
+                console.log(list);
+                
+
                 response.data = list;
                 break;
     
