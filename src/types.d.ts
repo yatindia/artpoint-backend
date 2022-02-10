@@ -14,7 +14,8 @@ export type product = {
     title : string,
     image : string,   
     category : string,
-    subCategory :  string
+    subCategory :  string,
+    trending: string,
         
 }
 

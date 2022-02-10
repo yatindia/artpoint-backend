@@ -20,6 +20,11 @@ const ProductSchema = new mongo.Schema({
     subCategory : {
         type : String,
         required: true
+    },
+
+    trending: {
+        type: String,
+        required: true
     }
 })
 

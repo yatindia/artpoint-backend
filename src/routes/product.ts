@@ -199,7 +199,8 @@ products.post("/create", async (req:Request, res:Response)=>{
         title : req.body.title,
         image : req.body.image,
         category : req.body.category,
-        subCategory: req.body.subCategory
+        subCategory: req.body.subCategory,
+        trending: req.body.trending
     }
     let response : response = {
         status : false,
@@ -240,7 +241,8 @@ products.post("/update", async (req : Request, res: Response)=>{
         title : req.body.title,
         image : req.body.image,
         category : req.body.category,
-        subCategory: req.body.subCategory
+        subCategory: req.body.subCategory,
+        trending:  req.body.trending
     }
     let response : response = {
         status : false,
@@ -383,9 +385,6 @@ products.get("/list_product", async (req, res)=>{
 // Search
 products.post("/list", async (req, res)=>{
 
-  
-
-
    let response : response = {
     status : false,
     message : "Somthing went wrong"
@@ -407,6 +406,34 @@ products.post("/list", async (req, res)=>{
    
    res.json(response)
 })
+
+
+// Search
+products.post("/list_trend", async (req, res)=>{
+
+   let response : response = {
+    status : false,
+    message : "Somthing went wrong"
+}
+
+   
+   try {
+       let data = await Product.find({trending: "yes"})
+
+      
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+       
+   } catch (error) {
+       response.message = "Somthing went wrong"
+   }
+
+   
+   res.json(response)
+})
+
+
 
 // Search By Category
 products.post("/list_by_category", async (req, res)=>{
