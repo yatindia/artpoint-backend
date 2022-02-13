@@ -92,7 +92,7 @@ products.post("/category/:operation", async(req, res )=>{
             case "list":
                 let list = await Category.find().catch((err: any)=> { response.backError = err; throw "error"})
 
-                console.log(list);
+
                 
 
                 response.data = list;
@@ -443,7 +443,7 @@ products.post("/list_by_category", async (req, res)=>{
         message : "Somthing went wrong"
     }
 
-    let skip = req.body.skip
+    // let skip = req.body.skip
 
     let query:any = {}
 
@@ -457,13 +457,14 @@ products.post("/list_by_category", async (req, res)=>{
         throw new Error("Please select the category");
         
     }
-    console.log(query);
+   
     
 
        let dataLength = await Product.find(query).countDocuments()
        let data = await Product.find(query)
-       .skip(skip).limit(10)
-console.log(data, skip);
+    //    .skip(skip)
+       .limit(2)
+
 
       
            response.data = data
@@ -477,7 +478,9 @@ console.log(data, skip);
        response.message = "Somthing went wrong"
    }
 
+   console.log(response);
    
+    
    res.json(response)
 })
 
