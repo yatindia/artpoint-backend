@@ -20,23 +20,44 @@ order.post("/place", async (req:Request, res: Response) =>{
         message : "Unable to place order"
       }
 
-    let data: orderType = {
+    // let data: orderType = {
+    //     product_id : req.body.product_id,
+    //     order_details : {
+    //         width :     req.body.order_details.width ,
+    //         height :    req.body.order_details.height ,
+    //         arcTop :    req.body.order_details.arcTop ,
+    //         arcBottom : req.body.order_details.arcBottom ,
+    //         varnish :   req.body.order_details.varnish ,
+    //         whiteCoat : req.body.order_details.whiteCoat ,
+    //         sandwich :  req.body.order_details.sandwich ,
+    //         message :   req.body.order_details.message
+    //     },
+    //     order_placed_by : req.body.order_placed_by,
+    //     shipping_address :  req.body.shipping_address,
+    //     status : 0,
+    //     // category : req.body.category,
+    //     // subCategory :  req.body.subCategory
+    // }
+
+    let data = {
         product_id : req.body.product_id,
-        order_details : {
-            width :     req.body.order_details.width ,
-            height :    req.body.order_details.height ,
-            arcTop :    req.body.order_details.arcTop ,
-            arcBottom : req.body.order_details.arcBottom ,
-            varnish :   req.body.order_details.varnish ,
-            whiteCoat : req.body.order_details.whiteCoat ,
-            sandwich :  req.body.order_details.sandwich ,
-            message :   req.body.order_details.message
+        order_details  :{
+            width : req.body.order_details.width,
+            height : req.body.order_details.height,
+            arc : req.body.arc,
+            varnish : req.body.order_details.varnish,
+            whiteCoat : req.body.order_details.whiteCoat,
+            quantity: req.body.order_details.quantity,
+            price: req.body.order_details.price,
+            sandwich : req.body.order_details.sglass,
+            message : req.body.messgage,
+            position: req.body.order_details.position,
         },
         order_placed_by : req.body.order_placed_by,
-        shipping_address :  req.body.shipping_address,
-        status : 0,
-        // category : req.body.category,
-        // subCategory :  req.body.subCategory
+        shipping_address : req.body.shipping_address,
+        category:req.body.category,
+        subCategory: req.body.subCategory,
+        status: 0
     }
 
     try {
