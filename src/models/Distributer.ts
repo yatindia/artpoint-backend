@@ -43,6 +43,11 @@ const DistributerSchema = new mongo.Schema({
         default : false
     },
 
+    faviroutes : [{
+        type: String,
+        required: false
+    }]
+
 })
 
 const Distributer =  mongo.model("Distributer", DistributerSchema )

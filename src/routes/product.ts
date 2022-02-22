@@ -313,6 +313,7 @@ products.post("/search", async (req, res)=>{
 products.post("/list/:productid", async (req, res)=>{
 
     let product_id = req.params.productid
+
     
     let response : response = {
         status : false,
@@ -408,6 +409,34 @@ products.post("/list", async (req, res)=>{
 })
 
 
+products.post("/list_fav", async (req, res)=>{
+
+   let response : response = {
+        status : false,
+        message : "Somthing went wrong"
+    }
+
+    let ids = req.body.ids
+
+
+   
+   try {
+       let data = await Product.find({_id: {$in: ids}})
+
+      
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+       
+   } catch (error) {
+       response.message = "Somthing went wrong"
+   }
+
+   
+   res.json(response)
+})
+
+
 // Search
 products.post("/list_trend", async (req, res)=>{
 
@@ -434,7 +463,6 @@ products.post("/list_trend", async (req, res)=>{
 })
 
 
-
 // Search By Category
 products.post("/list_by_category", async (req, res)=>{
 
@@ -443,7 +471,8 @@ products.post("/list_by_category", async (req, res)=>{
         message : "Somthing went wrong"
     }
 
-    // let skip = req.body.skip
+
+    let skip = req.body.skip
 
     let query:any = {}
 
@@ -463,7 +492,7 @@ products.post("/list_by_category", async (req, res)=>{
        let dataLength = await Product.find(query).countDocuments()
        let data = await Product.find(query)
     //    .skip(skip)
-       .limit(2)
+    //    .limit(1)
 
 
       
@@ -478,10 +507,37 @@ products.post("/list_by_category", async (req, res)=>{
        response.message = "Somthing went wrong"
    }
 
-   console.log(response);
+
    
     
    res.json(response)
 })
+
+
+
+// Search By Category
+products.post("/my_fav", async (req, res)=>{
+
+   let response : response = {
+        status : false,
+        message : "Somthing went wrong"
+    }
+    let fav = req.body.fav
+
+   try {
+
+
+       let data = await Product.find({_id: {$in: fav}})
+           response.data = data
+           response.status = true
+           response.message = "Data Fetched sucessfully"
+   } catch (error) {
+       response.message = "Somthing went wrong"
+   }
+    
+   res.json(response)
+})
+
+
 
 export default products

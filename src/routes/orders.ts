@@ -20,24 +20,6 @@ order.post("/place", async (req:Request, res: Response) =>{
         message : "Unable to place order"
       }
 
-    // let data: orderType = {
-    //     product_id : req.body.product_id,
-    //     order_details : {
-    //         width :     req.body.order_details.width ,
-    //         height :    req.body.order_details.height ,
-    //         arcTop :    req.body.order_details.arcTop ,
-    //         arcBottom : req.body.order_details.arcBottom ,
-    //         varnish :   req.body.order_details.varnish ,
-    //         whiteCoat : req.body.order_details.whiteCoat ,
-    //         sandwich :  req.body.order_details.sandwich ,
-    //         message :   req.body.order_details.message
-    //     },
-    //     order_placed_by : req.body.order_placed_by,
-    //     shipping_address :  req.body.shipping_address,
-    //     status : 0,
-    //     // category : req.body.category,
-    //     // subCategory :  req.body.subCategory
-    // }
 
     let data = {
         product_id : req.body.product_id,
@@ -48,8 +30,9 @@ order.post("/place", async (req:Request, res: Response) =>{
             varnish : req.body.order_details.varnish,
             whiteCoat : req.body.order_details.whiteCoat,
             quantity: req.body.order_details.quantity,
+            glass: req.body.order_details.glass,
             price: req.body.order_details.price,
-            sandwich : req.body.order_details.sglass,
+            sandwich : req.body.order_details.sandwich,
             message : req.body.messgage,
             position: req.body.order_details.position,
         },
@@ -68,13 +51,12 @@ order.post("/place", async (req:Request, res: Response) =>{
             response.message = "Order placed successfully"
         }).
         catch((err) => { 
-            console.log(err);
+
             
             throw new Error
         })
 
     } catch (error) {
-        // console.log(error);
         
         
         response.message = "Somthing went wrong while placing the order!"
@@ -203,6 +185,51 @@ order.post("/single_order_view", async (req:Request, res: Response)=>{
 
     res.json(response)
 })
+
+
+order.post("/cancel", async (req:Request, res:Response)=> {
+    let response:response = {
+      status : false,
+      message : "Unable to delete the order, please try later"
+    }
+    
+    let order_id = req.body._id;
+
+  
+    try {
+  
+  
+     let order_status = await Order.findById(order_id)
+
+     if (order_status.status == 0) {
+        await Order.findByIdAndDelete(order_id)
+          .then(()=>{
+            response.status = true
+            response.message = 'Order deleted successfully!'
+          })
+          .catch(()=>{throw 'somthing failed while deleting the status, please try again!'})
+     }
+     else {
+         throw new Error("At this point the order cannot be deleted");
+         
+     }
+
+      
+    } catch (error) {
+      
+      if (typeof error == 'string') {
+  
+        response.status = false
+        response.message = error
+      }
+    }
+  
+    
+    res.json(response)
+  
+  })
+
+
 
 export default order
 

@@ -14,9 +14,10 @@ const OrderDetails = new mongo.Schema({
     },
     varnish : Boolean,
     whiteCoat : Boolean,
-    quantity: Boolean,
+    quantity: Number,
     price: Number,
     sandwich : Number,
+    glass: Number,
     message : String
 })
 
@@ -57,6 +58,10 @@ const OrderSchema = new mongo.Schema({
     subCategory : {
         type : String,
         required: false
+    },
+    order_date: {
+        type: Date,
+        default: new Date()
     }
 })
 

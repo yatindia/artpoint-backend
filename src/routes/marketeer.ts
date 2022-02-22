@@ -65,7 +65,7 @@ marketeerRoute.post("/login", async (req:Request, res:Response)=> {
   } catch (error) {
     response.message = "Error to login"
   }
-  console.log(response);
+
   
   res.json(response)
 })
@@ -117,18 +117,15 @@ marketeerRoute.post("/update" , async (req:Request, res:Response)=>{
 
 marketeerRoute.post("/list" , async (req:Request, res:Response)=>{
 
-
   let response:response = {
     status : false,
-    message : "Unable to update, please try later!"
+    message : "Unable to find, please try later!"
   }
 
   let _id = req.body._id
 
 
-
   try {
-
     
     await Marketeer.findById(_id)
     .then(function(res){ 
@@ -141,10 +138,12 @@ marketeerRoute.post("/list" , async (req:Request, res:Response)=>{
         address: res.address
       }
     })
-    .catch(function(){
+    .catch(function(er){
       throw new Error;
     })
   } catch (error) {
+   
+    
     response.message = "Error occured while fetching, try again"
   }
 
@@ -170,10 +169,7 @@ marketeerRoute.post("/update_password" , async (req:Request, res:Response)=>{
     old_password: req.body.old_password
   }
 
-  console.log(
-    {_id:id, password: password.old_password}
-  );
-  
+
 
   try {
 

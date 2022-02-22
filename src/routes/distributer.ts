@@ -38,7 +38,8 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
           name: loginCheck[0].name,
           phone: loginCheck[0].phone,
           email: loginCheck[0].email,  
-          basePrice: loginCheck[0].basePrice
+          basePrice: loginCheck[0].basePrice,
+          faviroutes: loginCheck[0].faviroutes
         }
         
         let token = 
@@ -68,9 +69,6 @@ distributerRoute.post("/login", async (req:Request, res:Response)=> {
 
   res.json(response)
 })
-
-
-
 
 
 distributerRoute.post("/update" , async (req:Request, res:Response)=>{
@@ -107,10 +105,14 @@ distributerRoute.post("/update" , async (req:Request, res:Response)=>{
         address: res.address
       }
     })
-    .catch(function(){
+    .catch(function(error){
+  
+      
       throw new Error;
     })
   } catch (error) {
+    console.log(error);
+    
     response.message = "Error occured while updating, try again"
   }
 
@@ -136,19 +138,29 @@ distributerRoute.post("/update_password" , async (req:Request, res:Response)=>{
   }
 
   try {
+  
+  let currenData = await Distributer.findById(_id)
 
-    await Distributer.findOneAndUpdate({_id, password: password.old_password},{
+
+   if (currenData.password == password.old_password) {
+    await Distributer.findOneAndUpdate({_id: _id, password: password.old_password},{
       $set:{
         password: password.new_password
       }
     })
     .then(function(res){ 
+
+      
       response.status = true;
       response.message = "Password Updated successfully!";
     })
     .catch(function(){
       throw new Error;
     })
+   }else{
+     response.message = "Please CHeck The Old Password"
+     response.status = false
+   }
   } catch (error) {
     response.message = "Error occured while updating password, try again"
   }
@@ -165,7 +177,7 @@ distributerRoute.post("/read", async (req:Request, res:Response)=> {
   }
   let _id = req.body._id
 
-  console.log(_id);
+
   
 
   try {
@@ -190,6 +202,81 @@ distributerRoute.post("/read", async (req:Request, res:Response)=> {
 
 })
 
+distributerRoute.post("/fav", async (req:Request, res:Response)=> {
+
+  let response:response = {
+    status : false,
+    message : "Unable to fetch your account, please try later!"
+  }
+  let _id = req.body._id
+
+  try {
+
+    await Distributer.findById(_id)
+    .then((data)=>{
+      response.status = true
+      response.message = "Bingo!"
+      response.data = data.faviroutes
+    
+    })
+    .catch(()=>{throw new Error})
+  } catch (error) {
+    response.status = false
+    response.message = "Something went worng, please try again"
+  }
+
+
+  
+
+  res.json(response)
+
+})
+
+distributerRoute.post("/edit_fav", async (req:Request, res:Response)=> {
+
+  let response:response = {
+    status : false,
+    message : "Unable to fetch your account, please try later!"
+  }
+  let _id = req.body._id
+  let pdt_id = req.body.pdt_id
+
+  try {
+
+    if (req.body.operation == "add") {
+      await Distributer.findByIdAndUpdate(_id, {$addToSet:{faviroutes: pdt_id}})
+      .then((data)=>{
+        response.status = true
+        response.message = "Bingo!"
+        response.data = data.faviroutes
+      
+      })
+      .catch(()=>{throw new Error})
+    }
+    else if (req.body.operation == "remove") {
+      await Distributer.findByIdAndUpdate(_id, {$pull:{faviroutes: pdt_id}})
+      .then((data)=>{
+        response.status = true
+        response.message = "Bingo!"
+        response.data = data.faviroutes
+      
+      })
+      .catch(()=>{throw new Error})
+    }
+
+  } catch (error) {
+    response.status = false
+    response.message = "Something went worng, please try again"
+  }
+
+
+  
+
+  res.json(response)
+
+})
+
+
 distributerRoute.post("/my_orders", async (req:Request, res:Response)=> {
 
   let response:response = {
@@ -199,9 +286,9 @@ distributerRoute.post("/my_orders", async (req:Request, res:Response)=> {
   let _id = req.body._id
 
   try {
+    
 
-
-    await Order.find({order_placed_by: _id})
+    await Order.find({order_placed_by: _id, status: {$lt: 6}})
     .then((data)=>{
       response.status = true
       response.message = "Bingo!"

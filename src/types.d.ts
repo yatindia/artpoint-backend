@@ -35,7 +35,8 @@ export type distributer = {
     address? : string,
     basePrice?: number,
     deliveryPrice?: number,
-    active?: boolean
+    active?: boolean,
+    faviroutes?:array
 }
 
 export type orderType = {
