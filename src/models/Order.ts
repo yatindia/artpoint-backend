@@ -2,8 +2,8 @@ import mongo from "mongoose"
 
 
 const OrderDetails = new mongo.Schema({
-    width : Number,
-    height : Number,
+    width : String,
+    height : String,
     arc : Boolean,
     position: {
         top: Boolean,

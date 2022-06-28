@@ -292,7 +292,18 @@ products.post("/search", async (req, res)=>{
 
     try {
         
-        let result = await Product.find(list_query)
+        let resultSize = await Product.find(list_query).countDocuments()
+        console.log(resultSize);
+        
+        let result = await Product.aggregate([
+            { 
+              $match: { 
+                category : category ,
+                subCategory : subCategory 
+              }
+            },
+            { $sample: { size:resultSize } }
+        ])
         .then(data => {
             response.data = data
             response.status = true
@@ -300,7 +311,7 @@ products.post("/search", async (req, res)=>{
         })
         .catch(err => {throw new Error})
     } catch (error) {
-        response.message = 'Somthing went wrong, failed to fetch';
+        response.message = 'Somthing went wrong, failed to fetch!';
         return res.json(response)
     }
 

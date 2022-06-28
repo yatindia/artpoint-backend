@@ -1,0 +1,7 @@
+POST http://127.0.0.1:5000/products/search
+Content-Type: application/json
+
+{
+    "category": "sdafdsadsa",
+    "subCategory": "asdasda"
+}

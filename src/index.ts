@@ -34,7 +34,11 @@ app.use("/product_images", express.static("images"))
 
 
 
-mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@artpointdb.mddbl.mongodb.net/artpoint?retryWrites=true&w=majority`)
+// mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@artpointdb.mddbl.mongodb.net/artpoint?retryWrites=true&w=majority`)
+mongo.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lgzgs.mongodb.net/artpoint?authSource=admin&replicaSet=atlas-10ukxo-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true`)
+
+
+
 .then(()=> {console.log("connected")})
 .catch( (err) => {console.log("Somthing went wrong, Try again later")})
 
